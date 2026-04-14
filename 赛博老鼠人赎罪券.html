@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>赛博赎罪券 · 老鼠人木鱼 | 精神庇护所</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            min-height: 100vh;
+            background: radial-gradient(circle at 30% 10%, #0a0a0a, #0a0212);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Courier New', 'Pixelated MS Sans Serif', monospace;
+            padding: 1rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .mold-spots {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.3;
+            background-image: radial-gradient(circle at 15% 40%, rgba(80,50,30,0.5) 1.5px, transparent 1.5px),
+                              radial-gradient(circle at 85% 70%, rgba(120,70,40,0.4) 2px, transparent 2px);
+            background-size: 45px 45px, 60px 60px;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 560px;
+            width: 100%;
+            background: rgba(10, 10, 20, 0.7);
+            backdrop-filter: blur(4px);
+            border-radius: 3rem;
+            border: 1px solid rgba(255, 200, 100, 0.4);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 20px rgba(255, 180, 40, 0.2);
+            padding: 1.8rem 1.5rem 2rem;
+            transition: box-shadow 0.3s ease;
+        }
+        .container.vip-glow {
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5), 0 0 15px rgba(255, 100, 0, 0.3);
+        }
+
+        .title {
+            text-align: center;
+            font-size: 2rem;
+            letter-spacing: 4px;
+            font-weight: bold;
+            color: #FFD966;
+            text-shadow: 0 0 6px #ff9900, 0 0 12px #aa6f00;
+            margin-bottom: 0.2rem;
+        }
+        
+        /* VIP称号 */
+        .vip-title {
+            text-align: center;
+            font-size: 0.75rem;
+            margin-bottom: 0.5rem;
+            color: #ffaa44;
+            background: linear-gradient(90deg, transparent, #ffaa4433, transparent);
+            padding: 4px;
+            border-radius: 20px;
+            letter-spacing: 2px;
+        }
+        .vip-title span {
+            animation: gentlePulse 1.5s ease-in-out infinite;
+            display: inline-block;
+        }
+        @keyframes gentlePulse {
+            0%, 100% { opacity: 0.7; text-shadow: 0 0 0px gold; }
+            50% { opacity: 1; text-shadow: 0 0 6px gold; }
+        }
+
+        /* 老鼠头套 */
+        .rat-altar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0.5rem 0 1rem;
+            cursor: pointer;
+        }
+        .rat-head {
+            width: 210px;
+            height: 190px;
+            background: #3a2a22;
+            border-radius: 50% 50% 45% 45% / 55% 55% 45% 45%;
+            position: relative;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            transition: transform 0.05s linear, box-shadow 0.1s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(ellipse at 35% 40%, #4f3827, #2a1e16);
+            border: 2px solid #bc8f6b;
+        }
+        .rat-head.vip-hit {
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 0 0 10px rgba(255, 100, 0, 0.5);
+            border-color: #ffcc66;
+        }
+        .rat-ear-left, .rat-ear-right {
+            position: absolute;
+            width: 62px;
+            height: 62px;
+            background: #4f3827;
+            border-radius: 50%;
+            top: -26px;
+            border: 1px solid #bc8f6b;
+        }
+        .rat-ear-left { left: 2px; transform: rotate(-20deg); }
+        .rat-ear-right { right: 2px; transform: rotate(20deg); }
+        .rat-ear-left::after, .rat-ear-right::after {
+            content: "";
+            position: absolute;
+            width: 35px;
+            height: 35px;
+            background: #d99e6e;
+            border-radius: 50%;
+            top: 12px;
+            left: 12px;
+            opacity: 0.6;
+        }
+        .rat-eyes {
+            display: flex;
+            justify-content: center;
+            gap: 38px;
+            margin: 18px 0 8px;
+        }
+        .rat-eye {
+            width: 26px;
+            height: 28px;
+            background: #0a0a0a;
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 0 0 2px #5a3e2a;
+        }
+        .rat-eye::after {
+            content: "";
+            position: absolute;
+            width: 11px;
+            height: 11px;
+            background: #ffdfa5;
+            border-radius: 50%;
+            top: 6px;
+            left: 7px;
+            opacity: 0.9;
+        }
+        .rat-eye.weary::after {
+            height: 3px;
+            top: 19px;
+            left: 5px;
+            width: 16px;
+            background: #ac8e62;
+            border-radius: 2px;
+        }
+        .rat-nose {
+            width: 24px;
+            height: 20px;
+            background: #ff9eb5;
+            border-radius: 50%;
+            margin: 5px auto 3px;
+            box-shadow: 0 0 6px #ff99aa;
+        }
+        .whiskers {
+            display: flex;
+            justify-content: center;
+            gap: 55px;
+            font-size: 13px;
+            color: #c0a070;
+        }
+        .click-counter {
+            margin-top: 12px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: #00000066;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            color: #ffda99;
+            text-align: center;
+        }
+        .counter-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 6px;
+        }
+        .counter-box {
+            background: #00000055;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            text-align: center;
+        }
+
+        .combo-indicator {
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: #ffaa66;
+            background: #00000055;
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 20px;
+            transition: all 0.1s;
+        }
+        .combo-indicator.vip-combo {
+            background: #ffaa3311;
+            color: #ffcc77;
+            text-shadow: 0 0 4px orange;
+        }
+
+        /* 弹幕 - VIP弹幕更华丽 */
+        .danmaku-container {
+            position: fixed;
+            top: 12%;
+            left: 0;
+            width: 100%;
+            height: 70%;
+            pointer-events: none;
+            z-index: 20;
+            overflow: hidden;
+        }
+        .danmaku {
+            position: absolute;
+            white-space: nowrap;
+            background: rgba(0,0,0,0.8);
+            color: #ffefcf;
+            padding: 6px 18px;
+            border-radius: 40px;
+            border-left: 4px solid #f0b27a;
+            animation: flyRight 2.2s linear forwards;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        .danmaku.vip-danmaku {
+            background: linear-gradient(90deg, #2a1a0a, #1a0a00);
+            border-left: 4px solid #ffaa44;
+            box-shadow: 0 0 12px rgba(255, 170, 68, 0.6);
+            color: #ffefaa;
+            font-style: italic;
+        }
+        @keyframes flyRight {
+            0% { transform: translateX(100vw); opacity: 1; }
+            70% { opacity: 1; }
+            100% { transform: translateX(-320px); opacity: 0; }
+        }
+
+        /* 佛光特效 - VIP版更强 */
+        .buddha-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,215,0,0.8) 0%, rgba(255,100,0,0.5) 40%, rgba(0,0,0,0.85) 100%);
+            pointer-events: none;
+            z-index: 100;
+            animation: fadeOutGlow 1.2s ease-out forwards;
+        }
+        .buddha-glow.vip-super {
+            background: radial-gradient(circle, rgba(255,235,100,0.95) 0%, rgba(255,140,0,0.7) 35%, rgba(0,0,0,0.9) 100%);
+        }
+        @keyframes fadeOutGlow {
+            0% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+        .gold-particle {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, #ffdd88, #ffaa33);
+            border-radius: 50%;
+            filter: blur(1px);
+            pointer-events: none;
+            z-index: 101;
+            animation: floatUp 1.3s forwards;
+            box-shadow: 0 0 6px gold;
+        }
+        .gold-particle.vip-particle {
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, #ffeeaa, #ffcc44);
+            box-shadow: 0 0 12px gold;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-180px) scale(0.2); opacity: 0; }
+        }
+        .flash-white {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            pointer-events: none;
+            z-index: 99;
+            animation: flashOut 0.15s ease-out forwards;
+        }
+        @keyframes flashOut {
+            0% { opacity: 0.6; }
+            100% { opacity: 0; }
+        }
+        
+        /* 点击涟漪特效 */
+        .ripple {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,215,0,0.8), transparent);
+            pointer-events: none;
+            z-index: 105;
+            animation: rippleExpand 0.5s ease-out forwards;
+        }
+        @keyframes rippleExpand {
+            0% { transform: scale(0.5); opacity: 0.8; width: 20px; height: 20px; }
+            100% { transform: scale(8); opacity: 0; width: 20px; height: 20px; }
+        }
+
+        /* 功德箱 */
+        .donation-box {
+            margin: 1.3rem 0 1rem;
+            background: #1e1915cc;
+            border-radius: 2rem;
+            padding: 0.7rem;
+            backdrop-filter: blur(8px);
+            border: 1px solid #d4af6a;
+        }
+        .donation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            color: #ffcf8a;
+            font-weight: bold;
+            padding: 0 0.3rem;
+        }
+        .donation-options {
+            display: none;
+            flex-direction: column;
+            gap: 14px;
+            margin-top: 18px;
+        }
+        .donation-options.show { display: flex; }
+        .tier-card {
+            background: #2c241ccc;
+            border-radius: 2rem;
+            padding: 0.8rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            border: 1px solid #b8860b;
+        }
+        .tier-info h4 { color: #ffdfb0; font-size: 1rem; }
+        .tier-info p { font-size: 0.7rem; color: #c2a575; }
+        .price-badge { font-weight: bold; color: #ffb347; font-size: 1.2rem; }
+        .action-btn {
+            background: #b87c2e;
+            border: none;
+            color: black;
+            font-weight: bold;
+            padding: 6px 18px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-family: monospace;
+        }
+        .action-btn.outline { background: #3a2c1f; border: 1px solid #cba35c; color: #ffd9a5; }
+        .premium-panel { margin-top: 12px; border-top: 1px dashed #cba35c; padding-top: 12px; }
+        .custom-input {
+            width: 100%;
+            padding: 8px 12px;
+            background: #111;
+            border: 1px solid #b8860b;
+            color: #ffdfa5;
+            border-radius: 50px;
+            font-family: monospace;
+            margin-top: 6px;
+        }
+        .badge { background: #ffd96622; padding: 6px; border-radius: 30px; text-align: center; font-size: 0.75rem; margin-bottom: 6px; }
+        .unlock-row { display: flex; gap: 8px; margin-top: 8px; }
+        .share-area { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+        .share-btn {
+            background: #3a2c1f;
+            border: 1px solid #cba35c;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            color: #ffe0aa;
+            cursor: pointer;
+        }
+        footer { font-size: 0.55rem; text-align: center; margin-top: 1rem; color: #9e7e5e; }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 200;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-card { background: #1a1a2a; padding: 1.5rem; border-radius: 2rem; text-align: center; max-width: 280px; border: 1px solid gold; }
+        .modal-card img { width: 180px; margin: 0.5rem 0; border-radius: 1rem; }
+        .close-modal { background: #b87c2e; padding: 6px 16px; border-radius: 30px; cursor: pointer; margin-top: 12px; }
+        @media (max-width: 500px) {
+            .rat-head { width: 160px; height: 145px; }
+            .rat-ear-left, .rat-ear-right { width: 48px; height: 48px; top: -20px; }
+        }
+    </style>
+</head>
+<body>
+<div class="mold-spots"></div>
+<div class="danmaku-container" id="danmakuContainer"></div>
+
+<div class="container" id="mainContainer">
+    <div class="title">⚡ 赛博赎罪券 ⚡</div>
+    <div id="vipTitleArea" class="vip-title" style="display: none;"><span>✨ 宇宙第一躺平大师 · 永生特权已激活 ✨</span></div>
+
+    <div class="rat-altar" id="clickZone">
+        <div class="rat-head" id="ratHead">
+            <div class="rat-ear-left"></div>
+            <div class="rat-ear-right"></div>
+            <div class="rat-eyes">
+                <div class="rat-eye weary" id="leftEye"></div>
+                <div class="rat-eye weary" id="rightEye"></div>
+            </div>
+            <div class="rat-nose"></div>
+            <div class="whiskers">〰️〰️ 〰️〰️</div>
+        </div>
+        <div class="click-counter" id="clickCounter">0 次救赎 (今日)</div>
+        <div class="counter-group">
+            <div class="counter-box">📅 今日敲击: <span id="todayCount">0</span></div>
+            <div class="counter-box">🏆 累计功德: <span id="totalCount">0</span></div>
+        </div>
+        <div class="combo-indicator" id="comboIndicator">⚡ 连击 0 次 ⚡</div>
+        <div style="font-size: 0.6rem; margin-top: 5px;">✨ 快速连敲10次 · 赛博佛光 ✨</div>
+    </div>
+
+    <div class="donation-box">
+        <div class="donation-header" id="donationToggle">
+            <span>📿 功德箱 · 三种随喜方式 📿</span>
+            <span>▼</span>
+        </div>
+        <div class="donation-options" id="donationOptions">
+            <div class="tier-card">
+                <div class="tier-info">
+                    <h4>🐭 免费敲 · 赎罪基础版</h4>
+                    <p>弹幕赦免｜木鱼超度｜连击10次佛光</p>
+                </div>
+                <div class="price-badge">¥0</div>
+                <button class="action-btn outline" disabled style="opacity:0.6;">✨ 免费享用 ✨</button>
+            </div>
+            
+            <div class="tier-card">
+                <div class="tier-info">
+                    <h4>🧋 请赛博菩萨喝奶茶</h4>
+                    <p>随喜打赏 · 支持老鼠人神殿 · 无特权仅心意</p>
+                </div>
+                <div class="price-badge">任意金额</div>
+                <button class="action-btn" id="donateMilkTeaBtn">🎁 请菩萨喝茶</button>
+            </div>
+            
+            <div class="tier-card" style="border-color: #ffaa44; background: #3a2a1acc;">
+                <div class="tier-info">
+                    <h4 style="color: #ffcc66;">👑 赛博赎罪券 · 至尊特权</h4>
+                    <p>✨ 自定义赦免文案｜每次敲击金色涟漪｜专属弹幕特效<br>
+                    🎆 连击特效升级｜5连击小佛光｜10连击超强佛光<br>
+                    💎 永久保存 · 小红书自动发货解锁码</p>
+                </div>
+                <div class="price-badge" style="color: #ffcc44;">¥6.6</div>
+                <button class="action-btn" id="buyUnlockBtn" style="background: #d4a030;">👑 解锁至尊特权</button>
+            </div>
+
+            <div id="premiumZone" style="display: none;" class="premium-panel">
+                <div class="badge" id="userBadge">🔒 输入解锁码激活至尊特权</div>
+                <input type="text" id="unlockCodeInput" class="custom-input" placeholder="粘贴小红书订单自动发送的解锁码" autocomplete="off">
+                <div class="unlock-row">
+                    <button id="verifyUnlockBtn" class="action-btn" style="flex:1; background: #d4a030;">🔓 激活至尊特权</button>
+                </div>
+                <div id="premiumExtra" style="display: none; margin-top: 12px;">
+                    <div style="font-size:0.7rem; color:#ffcf8a; margin-bottom:4px;">📝 写一句你想被原谅的话（每次敲击都会飘出来）：</div>
+                    <input type="text" id="customPhrase" class="custom-input" placeholder="例如：今天没做错任何事｜甲方改稿不是我的错｜熬夜到三点宇宙原谅我" maxlength="35">
+                    <button id="saveCustomBtn" class="action-btn outline" style="margin-top: 8px;">✨ 保存 · 每次敲击都会出现 ✨</button>
+                    <div style="font-size:0.6rem; color:#ffaa66; text-align:center; margin-top:8px;">💎 至尊专属：金色涟漪 + 华丽弹幕 + 连击特效升级</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="share-area">
+        <div class="share-btn" id="shareBtn">📿 分享赛博功德</div>
+        <div class="share-btn" id="copyStatsBtn">📋 复制今日战绩</div>
+    </div>
+    <footer>老鼠人木鱼 · 赛博赎罪券 · 连敲10次佛光普照</footer>
+</div>
+
+<script>
+    // ==================== 配置区 ====================
+    const DONATE_QR_URL = "https://example.com/donate_qr.png";
+    const XIAOHONGSHU_PRODUCT_URL = "https://www.xiaohongshu.com/goods-detail/xxxxxxxx";
+    const UNLOCK_SECRET = "MOUSEBUDDHA66";
+    
+    // ==================== 音频引擎 ====================
+    let audioCtx = null;
+    function playWoodSound() {
+        try {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.frequency.value = 190;
+            gain.gain.value = 0.28;
+            osc.start();
+            gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.35);
+            osc.stop(audioCtx.currentTime + 0.3);
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+        } catch(e) {}
+    }
+    
+    // 播放VIP解锁特效音
+    function playVipUnlockSound() {
+        try {
+            if (!audioCtx) audioCtx = new AudioContext();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.frequency.value = 523.25;
+            gain.gain.value = 0.2;
+            osc.start();
+            setTimeout(() => {
+                osc.frequency.value = 659.25;
+            }, 100);
+            setTimeout(() => {
+                osc.frequency.value = 783.99;
+            }, 200);
+            gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.8);
+            osc.stop(audioCtx.currentTime + 0.8);
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+        } catch(e) {}
+    }
+    
+    // ==================== 数据 & 状态 ====================
+    let todayCount = 0, totalCount = 0;
+    let permanentUnlocked = false;
+    let userCustomText = "";
+    let combo = 0;
+    let comboTimer = null;
+    let isGlowing = false;
+    
+    const defaultMessages = [
+        "社恐无罪", "熬夜已赦免", "躺平也是战斗", "不想回消息 OK",
+        "今天没做错任何事", "允许自己烂一会儿", "老鼠人也是人",
+        "你的存在已经被原谅", "不用变好也可以", "赎罪 +1",
+        "💤 摆烂被宽恕", "🕯️ 社畜超度中", "🌙 夜猫子圣光", "🐭 鼠鼠被原谅啦"
+    ];
+    let dynamicMessages = [...defaultMessages];
+    
+    // DOM
+    const mainContainer = document.getElementById('mainContainer');
+    const vipTitleArea = document.getElementById('vipTitleArea');
+    const todaySpan = document.getElementById('todayCount');
+    const totalSpan = document.getElementById('totalCount');
+    const clickCounterSpan = document.getElementById('clickCounter');
+    const comboIndicator = document.getElementById('comboIndicator');
+    const danmakuContainer = document.getElementById('danmakuContainer');
+    const ratHead = document.getElementById('ratHead');
+    const premiumZone = document.getElementById('premiumZone');
+    const userBadgeSpan = document.getElementById('userBadge');
+    const unlockCodeInput = document.getElementById('unlockCodeInput');
+    const verifyUnlockBtn = document.getElementById('verifyUnlockBtn');
+    const premiumExtraDiv = document.getElementById('premiumExtra');
+    const customPhraseInput = document.getElementById('customPhrase');
+    const saveCustomBtn = document.getElementById('saveCustomBtn');
+    
+    // 涟漪特效
+    function addRipple(e, isVip = false) {
+        let x, y;
+        if (e.touches) {
+            x = e.touches[0].clientX;
+            y = e.touches[0].clientY;
+        } else {
+            x = e.clientX;
+            y = e.clientY;
+        }
+        const ripple = document.createElement('div');
+        ripple.className = 'ripple';
+        if (isVip) ripple.style.background = 'radial-gradient(circle, rgba(255,215,0,0.9), rgba(255,100,0,0.4))';
+        ripple.style.left = (x - 15) + 'px';
+        ripple.style.top = (y - 15) + 'px';
+        document.body.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 500);
+    }
+    
+    // VIP敲击特效
+    function addVipHitEffect() {
+        ratHead.classList.add('vip-hit');
+        setTimeout(() => ratHead.classList.remove('vip-hit'), 150);
+    }
+    
+    // 弹幕（VIP弹幕更华丽）
+    function showDanmaku(text, isVip = false) {
+        const div = document.createElement('div');
+        div.className = 'danmaku';
+        if (isVip) div.classList.add('vip-danmaku');
+        div.innerText = text;
+        div.style.top = (12 + Math.random() * 60) + '%';
+        div.style.fontSize = (0.85 + Math.random() * 0.5) + 'rem';
+        danmakuContainer.appendChild(div);
+        setTimeout(() => div.remove(), 2200);
+    }
+    
+    function getRandomMessage(isVip = false) {
+        let pool = dynamicMessages;
+        if (permanentUnlocked && userCustomText && userCustomText.trim()) {
+            if (Math.random() < 0.45) return userCustomText.trim();
+        }
+        return pool[Math.floor(Math.random() * pool.length)];
+    }
+    
+    // 佛光特效（VIP版更强）
+    function triggerBuddhaGlow(isSuper = false) {
+        if (isGlowing) return;
+        isGlowing = true;
+        
+        const flash = document.createElement('div');
+        flash.className = 'flash-white';
+        document.body.appendChild(flash);
+        setTimeout(() => flash.remove(), 150);
+        
+        const glowDiv = document.createElement('div');
+        glowDiv.className = 'buddha-glow';
+        if (permanentUnlocked) glowDiv.classList.add('vip-super');
+        document.body.appendChild(glowDiv);
+        
+        const particleCount = permanentUnlocked ? 88 : 66;
+        for (let i = 0; i < particleCount; i++) {
+            setTimeout(() => {
+                const particle = document.createElement('div');
+                particle.className = 'gold-particle';
+                if (permanentUnlocked) particle.classList.add('vip-particle');
+                particle.style.left = Math.random() * window.innerWidth + 'px';
+                particle.style.top = Math.random() * window.innerHeight + 'px';
+                particle.style.width = (5 + Math.random() * 8) + 'px';
+                particle.style.height = particle.style.width;
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 1300);
+            }, i * 10);
+        }
+        
+        setTimeout(() => glowDiv.remove(), 1200);
+        
+        // 特效音
+        try {
+            if (!audioCtx) audioCtx = new AudioContext();
+            const osc2 = audioCtx.createOscillator();
+            const gain2 = audioCtx.createGain();
+            osc2.connect(gain2);
+            gain2.connect(audioCtx.destination);
+            osc2.frequency.value = permanentUnlocked ? 1046.5 : 880;
+            gain2.gain.value = 0.25;
+            osc2.start();
+            gain2.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.6);
+            osc2.stop(audioCtx.currentTime + 0.55);
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+        } catch(e) {}
+        
+        setTimeout(() => { isGlowing = false; }, 1300);
+    }
+    
+    function updateComboUI() {
+        comboIndicator.innerText = `⚡ 连击 ${combo} 次 ⚡`;
+        if (combo >= 5) {
+            comboIndicator.style.color = "#ffcc66";
+            comboIndicator.style.textShadow = "0 0 5px orange";
+            if (permanentUnlocked) comboIndicator.classList.add('vip-combo');
+        } else {
+            comboIndicator.style.color = "#ffaa66";
+            comboIndicator.style.textShadow = "none";
+            comboIndicator.classList.remove('vip-combo');
+        }
+    }
+    
+    // 核心敲击逻辑
+    function onRatClick(e) {
+        playWoodSound();
+        
+        // 涟漪特效（VIP金色）
+        addRipple(e, permanentUnlocked);
+        if (permanentUnlocked) addVipHitEffect();
+        
+        todayCount++;
+        totalCount++;
+        todaySpan.innerText = todayCount;
+        totalSpan.innerText = totalCount;
+        clickCounterSpan.innerText = todayCount + " 次救赎 (今日)";
+        localStorage.setItem('todayCount', todayCount);
+        localStorage.setItem('totalCount', totalCount);
+        
+        ratHead.style.transform = 'scale(0.96)';
+        setTimeout(() => { ratHead.style.transform = ''; }, 85);
+        
+        const msg = getRandomMessage(permanentUnlocked);
+        showDanmaku(msg, permanentUnlocked);
+        
+        if (comboTimer) clearTimeout(comboTimer);
+        combo++;
+        updateComboUI();
+        
+        // VIP：5连击小佛光
+        if (permanentUnlocked && combo >= 5 && combo < 10 && !isGlowing) {
+            triggerBuddhaGlow(false);
+            showDanmaku("✨ 五连加持 · 金光初现 ✨", true);
+        }
+        
+        if (combo >= 10 && !isGlowing) {
+            triggerBuddhaGlow(true);
+            showDanmaku(permanentUnlocked ? "✨✨ 至尊佛光普照 ✨✨ 十连超度 ✨✨" : "✨✨ 赛博佛光普照 ✨✨ 十连超度 ✨✨", permanentUnlocked);
+            combo = 0;
+            updateComboUI();
+            if (comboTimer) clearTimeout(comboTimer);
+            comboTimer = null;
+        } else {
+            comboTimer = setTimeout(() => {
+                if (combo < 10 && combo > 0) {
+                    showDanmaku(`⚡ ${combo}连击中断，再努力一下~ ⚡`, false);
+                    combo = 0;
+                    updateComboUI();
+                }
+                comboTimer = null;
+            }, 1000);
+        }
+    }
+    
+    function initDailyReset() {
+        const lastDate = localStorage.getItem('lastDate');
+        const today = new Date().toDateString();
+        if (lastDate !== today) {
+            todayCount = 0;
+            localStorage.setItem('lastDate', today);
+        } else {
+            todayCount = parseInt(localStorage.getItem('todayCount')) || 0;
+        }
+        totalCount = parseInt(localStorage.getItem('totalCount')) || 0;
+        todaySpan.innerText = todayCount;
+        totalSpan.innerText = totalCount;
+        clickCounterSpan.innerText = todayCount + " 次救赎 (今日)";
+    }
+    
+    // VIP解锁特效
+    function showVipUnlockSpectacular() {
+        // 黑金开场
+        for (let i = 0; i < 120; i++) {
+            setTimeout(() => {
+                const particle = document.createElement('div');
+                particle.className = 'gold-particle vip-particle';
+                particle.style.left = Math.random() * window.innerWidth + 'px';
+                particle.style.top = Math.random() * window.innerHeight + 'px';
+                particle.style.width = (6 + Math.random() * 12) + 'px';
+                particle.style.height = particle.style.width;
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 1500);
+            }, i * 8);
+        }
+        
+        const flash = document.createElement('div');
+        flash.className = 'flash-white';
+        document.body.appendChild(flash);
+        setTimeout(() => flash.remove(), 200);
+        
+        const glow = document.createElement('div');
+        glow.className = 'buddha-glow vip-super';
+        document.body.appendChild(glow);
+        setTimeout(() => glow.remove(), 1500);
+        
+        playVipUnlockSound();
+        
+        // 容器VIP光效
+        mainContainer.classList.add('vip-glow');
+        setTimeout(() => mainContainer.classList.remove('vip-glow'), 3000);
+    }
+    
+    function verifyUnlockCode() {
+        const code = unlockCodeInput.value.trim();
+        if (code === UNLOCK_SECRET) {
+            if (!permanentUnlocked) {
+                permanentUnlocked = true;
+                localStorage.setItem('permanentUnlocked', 'true');
+                
+                // VIP特效
+                showVipUnlockSpectacular();
+                
+                vipTitleArea.style.display = "block";
+                userBadgeSpan.innerText = "👑 至尊特权已激活 👑";
+                premiumExtraDiv.style.display = "block";
+                
+                const savedCustom = localStorage.getItem('userCustomText');
+                if (savedCustom) {
+                    userCustomText = savedCustom;
+                    customPhraseInput.value = savedCustom;
+                }
+                updateDynamicMessages();
+                
+                showDanmaku("✨ 至尊特权解锁！金色涟漪护体 ✨", true);
+                setTimeout(() => {
+                    showDanmaku("💎 每次敲击都有专属特效 + 自定义赦免文案 💎", true);
+                }, 800);
+                
+                alert("🎉👑 至尊特权解锁成功！👑🎉\n\n✨ 金色涟漪特效\n✨ 华丽弹幕\n✨ 5连击小佛光\n✨ 自定义赦免文案\n\n每次敲击都会飘出你写的那句话~");
+            } else {
+                alert("你已是至尊特权用户✨");
+            }
+        } else {
+            alert("❌ 解锁码错误\n请确认小红书订单中收到的解锁码");
+        }
+    }
+    
+    function saveCustomMessage() {
+        if (!permanentUnlocked) {
+            alert("请先通过小红书购买6.6元至尊特权并输入解锁码激活");
+            return;
+        }
+        const newMsg = customPhraseInput.value.trim();
+        if (newMsg === "") {
+            alert("请输入你想被原谅的那句话✨");
+            return;
+        }
+        userCustomText = newMsg;
+        localStorage.setItem('userCustomText', userCustomText);
+        updateDynamicMessages();
+        alert(`✨ 已保存 ✨\n\n每次敲击老鼠头，「${userCustomText}」都会以华丽弹幕飘出`);
+        showDanmaku(`✨ "${userCustomText}" ✨`, true);
+    }
+    
+    function updateDynamicMessages() {
+        dynamicMessages = [...defaultMessages];
+        if (permanentUnlocked && userCustomText && userCustomText.trim()) {
+            if (!dynamicMessages.includes(userCustomText.trim())) {
+                dynamicMessages.push(userCustomText.trim());
+            }
+        }
+    }
+    
+    function loadPremiumStatus() {
+        if (localStorage.getItem('permanentUnlocked') === 'true') {
+            permanentUnlocked = true;
+            vipTitleArea.style.display = "block";
+            premiumZone.style.display = "block";
+            userBadgeSpan.innerText = "👑 至尊特权已激活 👑";
+            premiumExtraDiv.style.display = "block";
+            const savedMsg = localStorage.getItem('userCustomText');
+            if (savedMsg) {
+                userCustomText = savedMsg;
+                if(customPhraseInput) customPhraseInput.value = savedMsg;
+            }
+            updateDynamicMessages();
+        } else {
+            premiumZone.style.display = "block";
+            premiumExtraDiv.style.display = "none";
+            userBadgeSpan.innerText = "🔒 输入解锁码激活至尊特权";
+        }
+    }
+    
+    function showDonateModal() {
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = `
+            <div class="modal-card">
+                <h3 style="color:#ffcf8a">🧋 请赛博菩萨喝奶茶 🧋</h3>
+                <p style="font-size:12px;">随喜金额，纯粹支持老鼠人神殿</p>
+                <img src="${DONATE_QR_URL}" alt="收款码" onerror="this.src='https://placehold.co/200x200?text=请替换收款码链接'">
+                <p style="font-size:11px; margin-top:6px;">任意金额 · 感谢供养木鱼能量</p>
+                <button class="close-modal">关闭</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        modal.querySelector('.close-modal').onclick = () => modal.remove();
+    }
+    
+    function goToXiaohongshuProduct() {
+        window.open(XIAOHONGSHU_PRODUCT_URL, '_blank');
+        alert("已打开小红书商品页，拍下后系统自动发送解锁码💌\n复制解锁码回到本页面激活至尊特权~");
+    }
+    
+    function shareStats() {
+        const shareText = `🐭【赛博赎罪券】今日敲击 ${todayCount} 次，累计 ${totalCount} 次，得到赦免：“${getRandomMessage()}”\n老鼠人电子木鱼，连敲10次佛光普照 ✨`;
+        navigator.clipboard.writeText(shareText + ' ' + window.location.href);
+        alert("✅ 文案已复制，可分享到小红书或朋友圈");
+    }
+    
+    function copyStatsOnly() {
+        navigator.clipboard.writeText(`🐭 老鼠人救赎 | 今日 ${todayCount} 次 | 累计 ${totalCount} 次 | “${getRandomMessage()}”`);
+        alert("战绩已复制");
+    }
+    
+    // 事件绑定
+    document.getElementById('clickZone').addEventListener('click', onRatClick);
+    document.getElementById('donationToggle').addEventListener('click', () => {
+        document.getElementById('donationOptions').classList.toggle('show');
+    });
+    document.getElementById('donateMilkTeaBtn').addEventListener('click', showDonateModal);
+    document.getElementById('buyUnlockBtn').addEventListener('click', goToXiaohongshuProduct);
+    verifyUnlockBtn.addEventListener('click', verifyUnlockCode);
+    if (saveCustomBtn) saveCustomBtn.addEventListener('click', saveCustomMessage);
+    document.getElementById('shareBtn').addEventListener('click', shareStats);
+    document.getElementById('copyStatsBtn').addEventListener('click', copyStatsOnly);
+    
+    initDailyReset();
+    loadPremiumStatus();
+    
+    document.body.addEventListener('touchstart', () => {
+        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    }, { once: true });
+    
+    console.log("✨ 赛博赎罪券已启动 | 至尊特权包含金色涟漪+华丽弹幕+连击特效升级");
+</script>
+</body>
+</html>
